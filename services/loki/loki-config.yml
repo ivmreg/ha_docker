@@ -40,3 +40,13 @@ compactor:
   compactor_ring:
     kvstore:
       store: inmemory
+
+ruler:
+  rule_path: /loki/rules
+  alertmanager_url: http://localhost:9093
+  enable_api: true
+  storage:
+    type: local
+    local:
+      directory: /loki/rules
+
