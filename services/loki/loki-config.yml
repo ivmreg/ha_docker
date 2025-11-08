@@ -30,6 +30,7 @@ storage_config:
   boltdb_shipper:
     active_index_directory: /loki/index
     cache_location: /loki/cache
+    shared_store: filesystem
   filesystem:
     directory: /loki/chunks
 
@@ -39,12 +40,4 @@ limits_config:
   ingestion_burst_size_mb: 24
   max_streams_per_user: 0
   max_global_streams_per_user: 0
-
-ruler:
-  storage:
-    type: local
-    local:
-      directory: /loki/rules
-  rule_path: /tmp/rules
-  alertmanager_url: http://localhost:9093
-  enable_api: true
+  allow_structured_metadata: false
