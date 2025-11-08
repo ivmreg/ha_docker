@@ -1,0 +1,37 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions/positions.yaml
+  sync_period: 10s
+
+clients:
+  - url: ${LOKI_URL:-http://loki:3100/loki/api/v1/push}
+    tenant_id: ${LOKI_TENANT_ID:-}
+
+scrape_configs:
+  - job_name: syslog
+    syslog:
+      listen_address: ${SYSLOG_LISTEN_ADDRESS:-0.0.0.0}:${SYSLOG_LISTEN_PORT:-514}
+      idle_timeout: 60s
+      label_structured_data: true
+      use_incoming_timestamp: true
+      max_message_length: ${SYSLOG_MAX_MESSAGE_LENGTH:-0}
+      syslog_format:
+        type: ${SYSLOG_FORMAT:-rfc5424}
+    labels:
+      job: syslog
+    relabel_configs:
+      - source_labels: ['__syslog_message_hostname']
+        target_label: host
+      - source_labels: ['__syslog_message_app_name']
+        target_label: app
+      - source_labels: ['__syslog_message_severity']
+        target_label: severity
+      - source_labels: ['__syslog_connection_ip_address']
+        target_label: source_ip
+    pipeline_stages:
+      - template:
+          source: message
+          template: '{{ .Value | TrimSpace }}'

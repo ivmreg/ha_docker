@@ -1,0 +1,10 @@
+# Exclude Git and editor artifacts
+.git
+.gitignore
+.vscode
+.idea
+__pycache__
+*.pyc
+.env
+.env.*
+*.log
