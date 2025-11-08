@@ -18,10 +18,8 @@ scrape_configs:
       label_structured_data: true
       use_incoming_timestamp: true
       max_message_length: ${SYSLOG_MAX_MESSAGE_LENGTH:-0}
-      syslog_format:
-        type: ${SYSLOG_FORMAT:-rfc5424}
-    labels:
-      job: syslog
+      labels:
+        job: syslog
     relabel_configs:
       - source_labels: ['__syslog_message_hostname']
         target_label: host
