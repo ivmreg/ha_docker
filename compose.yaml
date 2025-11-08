@@ -8,6 +8,7 @@ services:
   loki:
     image: grafana/loki:latest
     container_name: loki
+    user: "0"
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
@@ -39,7 +40,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    user: "472"
+    user: "0"
     ports:
       - "3000:3000"
     environment:
