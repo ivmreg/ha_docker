@@ -27,6 +27,7 @@ share/python-wheels/
 MANIFEST
 
 grafana-data/
+prometheus-data/
 loki-data/
 loki-rules/
 loki-config.yaml/
