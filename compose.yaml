@@ -40,10 +40,12 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    user: "0"
     ports:
       - "9090:9090"
-    command: >
-      sh -c "chown nobody:nogroup /prometheus && /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
     volumes:
       - ./services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus-data:/prometheus
