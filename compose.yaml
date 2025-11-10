@@ -56,20 +56,20 @@ services:
       - loki
     restart: unless-stopped
 
-  chrony:
-    build:
-      context: ./dockerfiles/chrony
-      dockerfile: Dockerfile
-    container_name: chrony
-    ports:
-      - "123:123/udp"
-    volumes:
-      - ./chrony-data:/var/lib/chrony
-    networks:
-      - loki
-    restart: unless-stopped
-    cap_add:
-      - SYS_TIME
+  # chrony:
+  #   build:
+  #     context: ./dockerfiles/chrony
+  #     dockerfile: Dockerfile
+  #   container_name: chrony
+  #   ports:
+  #     - "123:123/udp"
+  #   volumes:
+  #     - ./chrony-data:/var/lib/chrony
+  #   networks:
+  #     - loki
+  #   restart: unless-stopped
+  #   cap_add:
+  #     - SYS_TIME
 
   grafana:
     image: grafana/grafana:latest
