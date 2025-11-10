@@ -1,0 +1,50 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # Syslog receiver configuration (TCP)
+  - job_name: syslog
+    syslog:
+      listen_address: 0.0.0.0:1514
+      listen_protocol: tcp
+      idle_timeout: 60s
+      syslog_format: rfc3164
+      label_structured_data: no
+      labels:
+        job: "syslog"
+    relabel_configs:
+      - source_labels: ['__syslog_message_hostname']
+        target_label: 'host'
+      - source_labels: ['__syslog_message_severity']
+        target_label: 'level'
+      - source_labels: ['__syslog_message_facility']
+        target_label: 'facility'
+      - source_labels: ['__syslog_message_app_name']
+        target_label: 'application'
+
+  # UDP syslog receiver (standard port 514)
+  - job_name: syslog-udp
+    syslog:
+      listen_address: 0.0.0.0:514
+      listen_protocol: udp
+      idle_timeout: 60s
+      syslog_format: rfc3164
+      label_structured_data: no
+      labels:
+        job: "syslog-udp"
+    relabel_configs:
+      - source_labels: ['__syslog_message_hostname']
+        target_label: 'host'
+      - source_labels: ['__syslog_message_severity']
+        target_label: 'level'
+      - source_labels: ['__syslog_message_facility']
+        target_label: 'facility'
+      - source_labels: ['__syslog_message_app_name']
+        target_label: 'application'

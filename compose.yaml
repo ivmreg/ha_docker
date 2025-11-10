@@ -14,7 +14,7 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - ./loki-data:/loki
-      - ./services/loki/loki-config.yml:/etc/loki/local-config.yaml
+      - ./config/loki/loki-config.yml:/etc/loki/local-config.yaml
     networks:
       - loki
     restart: unless-stopped
@@ -28,7 +28,7 @@ services:
       - "1514:1514/tcp"      # Alternative syslog port (TCP)
       - "9080:9080"          # Promtail metrics
     volumes:
-      - ./services/syslog/promtail.yaml:/etc/promtail/config.yaml
+      - ./config/promtail/promtail.yaml:/etc/promtail/config.yaml
       - /var/log:/var/log:ro
     command: -config.file=/etc/promtail/config.yaml
     networks:
@@ -47,7 +47,7 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
     volumes:
-      - ./services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus-data:/prometheus
     networks:
       - loki
@@ -55,6 +55,21 @@ services:
       - promtail
       - loki
     restart: unless-stopped
+
+  chrony:
+    build:
+      context: ./dockerfiles/chrony
+      dockerfile: Dockerfile
+    container_name: chrony
+    ports:
+      - "123:123/udp"
+    volumes:
+      - ./chrony-data:/var/lib/chrony
+    networks:
+      - loki
+    restart: unless-stopped
+    cap_add:
+      - SYS_TIME
 
   grafana:
     image: grafana/grafana:latest
@@ -67,6 +82,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
     volumes:
       - ./grafana-data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
     networks:
       - loki
     depends_on:
