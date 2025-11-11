@@ -54,6 +54,7 @@ services:
     depends_on:
       - promtail
       - loki
+      - snmp-exporter
     restart: unless-stopped
 
   # chrony:
@@ -86,5 +87,16 @@ services:
     networks:
       - loki
     depends_on:
+      - loki
+    restart: unless-stopped
+
+  snmp-exporter:
+    image: prom/snmp-exporter:latest
+    container_name: snmp-exporter
+    ports:
+      - "9116:9116"
+    volumes:
+      - ./config/snmp/snmp.yml:/etc/snmp_exporter/snmp.yml:ro
+    networks:
       - loki
     restart: unless-stopped

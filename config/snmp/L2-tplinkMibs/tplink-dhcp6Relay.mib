@@ -1,0 +1,186 @@
+      	
+	TPLINK-Dhcp6RELAY-MIB DEFINITIONS ::= BEGIN
+ 
+       IMPORTS 
+			MODULE-IDENTITY, OBJECT-TYPE
+          	  	        FROM SNMPv2-SMI
+          	tplinkMgmt
+						FROM TPLINK-MIB
+			ifIndex
+						FROM RFC1213-MIB;
+						
+			tplinkDhcp6RelayMIB MODULE-IDENTITY
+				LAST-UPDATED    "201212171121Z"
+				ORGANIZATION    "TPLINK"
+				CONTACT-INFO    "www.tplink.com"
+				DESCRIPTION	    "Private MIB for Dhcp66 Relay configuration."
+				REVISION        "201212171121Z"
+				DESCRIPTION
+				"Initial version of this MIB module."
+			::= { tplinkMgmt 89 }
+		
+			tplinkDhcp6RelayMIBObjects			OBJECT IDENTIFIER	::= { tplinkDhcp6RelayMIB 1 }
+			tplinkDhcp6RelayNotifications		OBJECT IDENTIFIER	::= { tplinkDhcp6RelayMIB 2 }
+			
+			dhcp6RelayGlobalConfig		OBJECT IDENTIFIER ::= {tplinkDhcp6RelayMIBObjects 1}
+			dhcp6RelayOption18Config		OBJECT IDENTIFIER	::= { tplinkDhcp6RelayMIBObjects 2}
+			dhcp6RelayOption37Config		OBJECT IDENTIFIER	::= { tplinkDhcp6RelayMIBObjects 3}
+			
+			dhcp6RelayEnableState OBJECT-TYPE
+            	SYNTAX  INTEGER{
+	      			disable(0), 						--disable
+	      			enable(1)								--enable
+	      		}
+            	MAX-ACCESS  read-write
+            	STATUS  current
+            	DESCRIPTION
+                      "Enable or disable the switch as a Dhcp6 relay."
+            ::= { dhcp6RelayGlobalConfig 1 }
+                    
+		--**************
+		--Set VLAN Interface	
+		--**************
+
+		--**************
+		--Set routed port Interface	
+		--**************
+
+		--**************
+		--Set port channel Interface	
+		--**************
+
+		--**************
+		--Set VLAN Relay	
+		--**************
+	
+		--**************
+	    -- the Dhcp6 Relay option 18 config
+		--**************
+
+			dhcp6RelayOption18ConfigTable OBJECT-TYPE
+				SYNTAX  SEQUENCE OF Dhcp6RELAYOPTION18CONFIGENTRY
+				MAX-ACCESS  not-accessible
+				STATUS  current
+				DESCRIPTION
+					  "A list of Dhcp6 Relay option 18 config entries.
+					   Here you can configure the port parameters for the Dhcp6 Relay option 18 feature."
+				::= { dhcp6RelayOption18Config 1 }
+	
+		    dhcp6RelayOption18ConfigEntry OBJECT-TYPE
+				SYNTAX  Dhcp6RELAYOPTION18CONFIGENTRY
+				MAX-ACCESS  not-accessible
+				STATUS  current
+				DESCRIPTION
+					  "An entry contains of the information of Dhcp6 Relay option 18 config."
+				INDEX   {ifIndex}
+				::= { dhcp6RelayOption18ConfigTable 1 }
+	  
+			Dhcp6RELAYOPTION18CONFIGENTRY ::=
+				SEQUENCE {
+							dhcp6RelayOption18ConfigPort
+									OCTET STRING (SIZE (0..255)), 
+							dhcp6RelayOption18ConfigStatus
+									INTEGER, 
+							dhcp6RelayOption18ConfigLag
+									OCTET STRING (SIZE (1..255))  
+				}
+	          
+			dhcp6RelayOption18ConfigPort OBJECT-TYPE
+				SYNTAX  OCTET STRING (SIZE (0..255))  
+				MAX-ACCESS  read-only
+				STATUS  current
+				DESCRIPTION
+					  "Port number"
+				::= { dhcp6RelayOption18ConfigEntry 1 }
+	    
+			dhcp6RelayOption18ConfigStatus OBJECT-TYPE
+				SYNTAX  INTEGER{
+					disable(0), 						
+					enable(1)			
+				}
+				MAX-ACCESS  read-write
+				STATUS  current
+				DESCRIPTION
+					  "0. disable
+					   1. enable
+					   Select Enable/Disable the port to support the Option 18 feature. "       
+				::= { dhcp6RelayOption18ConfigEntry 2 }
+
+			dhcp6RelayOption18ConfigLag OBJECT-TYPE
+				SYNTAX  OCTET STRING (SIZE (1..255))  
+				MAX-ACCESS  read-only
+				STATUS  current
+				DESCRIPTION
+						"The LAG to which the port belongs to."
+				::= { dhcp6RelayOption18ConfigEntry 3 }		
+
+		--**************
+	    -- the Dhcp6 Relay option 37 config
+		--**************								
+			dhcp6RelayOption37ConfigTable OBJECT-TYPE
+				SYNTAX  SEQUENCE OF Dhcp6RELAYOPTION37CONFIGENTRY
+				MAX-ACCESS  not-accessible
+				STATUS  current
+				DESCRIPTION
+					  "A list of Dhcp6 Relay option 37 config entries.
+					   Here you can configure the port parameters for the Dhcp6 Relay option 37 feature."
+				::= { dhcp6RelayOption37Config 1 }
+	
+		    dhcp6RelayOption37ConfigEntry OBJECT-TYPE
+				SYNTAX  Dhcp6RELAYOPTION37CONFIGENTRY
+				MAX-ACCESS  not-accessible
+				STATUS  current
+				DESCRIPTION
+					  "An entry contains of the information of Dhcp6 Relay option 37 config."
+				INDEX   {ifIndex}
+				::= { dhcp6RelayOption37ConfigTable 1 }
+	  
+			Dhcp6RELAYOPTION37CONFIGENTRY ::=
+				SEQUENCE {
+							dhcp6RelayOption37ConfigPort
+									OCTET STRING (SIZE (0..255)), 
+							dhcp6RelayOption37ConfigStatus
+									INTEGER, 
+							dhcp6RelayOption37ConfigRemoteID
+									OCTET STRING (SIZE (0..64)),
+							dhcp6RelayOption37ConfigLag
+									OCTET STRING (SIZE (1..255))  
+				}
+	          
+			dhcp6RelayOption37ConfigPort OBJECT-TYPE
+				SYNTAX  OCTET STRING (SIZE (0..255))  
+				MAX-ACCESS  read-only
+				STATUS  current
+				DESCRIPTION
+					  "Port number"
+				::= { dhcp6RelayOption37ConfigEntry 1 }
+	    
+			dhcp6RelayOption37ConfigStatus OBJECT-TYPE
+				SYNTAX  INTEGER{
+					disable(0), 						
+					enable(1)			
+				}
+				MAX-ACCESS  read-write
+				STATUS  current
+				DESCRIPTION
+					  "0. disable
+					   1. enable
+					   Select Enable/Disable the port to support the Option 37 feature. "       
+				::= { dhcp6RelayOption37ConfigEntry 2 }
+	                      							  
+			dhcp6RelayOption37ConfigRemoteID OBJECT-TYPE            
+				SYNTAX  OCTET STRING (SIZE (0..64)) 
+				MAX-ACCESS  read-write
+				STATUS  current
+				DESCRIPTION
+						"The sub-option Remote ID for the customized Option 37.(0-64 characters)"
+				::= { dhcp6RelayOption37ConfigEntry 3 }
+	 	                      
+			dhcp6RelayOption37ConfigLag OBJECT-TYPE
+				SYNTAX  OCTET STRING (SIZE (1..255))  
+				MAX-ACCESS  read-only
+				STATUS  current
+				DESCRIPTION
+						"The LAG to which the port belongs to."
+				::= { dhcp6RelayOption37ConfigEntry 4 }									
+	 END	
