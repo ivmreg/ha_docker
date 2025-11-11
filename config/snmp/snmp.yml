@@ -5,7 +5,7 @@
 auths:
   public_v2:
     community: public
-    version: 2c
+    version: 2
 
 modules:
   if_mib:
