@@ -39,21 +39,21 @@ scrape_configs:
       - target_label: __address__
         replacement: snmp-exporter:9116
 
-  - job_name: snmp_vendor
-    scrape_interval: 180s
-    # Vendor-specific walks may be larger/slower; give them more time.
-    scrape_timeout: 60s
-    metrics_path: /snmp
-    params:
-      auth: [public_v2]
-      module: [tplink]
-    static_configs:
-      - targets:
-          - '192.168.1.4'   # TL-SG2210P switch (vendor OIDs)
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: snmp-exporter:9116
+  # - job_name: snmp_vendor
+  #   scrape_interval: 180s
+  #   # Vendor-specific walks may be larger/slower; give them more time.
+  #   scrape_timeout: 60s
+  #   metrics_path: /snmp
+  #   params:
+  #     auth: [public_v2]
+  #     module: [tplink]
+  #   static_configs:
+  #     - targets:
+  #         - '192.168.1.4'   # TL-SG2210P switch (vendor OIDs)
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - target_label: __address__
+  #       replacement: snmp-exporter:9116

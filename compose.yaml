@@ -81,6 +81,12 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_SECURITY_ADMIN_USER=admin
+      # Disable all telemetry and usage stats reporting
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+      - GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES=false
+      - GF_ANALYTICS_FEEDBACK_LINKS_ENABLED=false
+      - GF_NEWS_NEWS_FEED_ENABLED=false
     volumes:
       - ./grafana-data:/var/lib/grafana
       - ./config/grafana/provisioning:/etc/grafana/provisioning
