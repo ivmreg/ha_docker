@@ -23,6 +23,7 @@ scrape_configs:
     scrape_interval: 60s
     metrics_path: /snmp
     params:
+      auth: [public_v2]
       module: [if_mib]
     static_configs:
       - targets:
@@ -39,6 +40,7 @@ scrape_configs:
     scrape_interval: 60s
     metrics_path: /snmp
     params:
+      auth: [public_v2]
       module: [tplink]
     static_configs:
       - targets:
