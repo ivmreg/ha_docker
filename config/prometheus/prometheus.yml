@@ -21,6 +21,9 @@ scrape_configs:
 
   - job_name: snmp
     scrape_interval: 60s
+    # SNMP walks on some devices can be slow; increase scrape_timeout so
+    # Prometheus doesn't cancel the request after the 10s default.
+    scrape_timeout: 15s
     metrics_path: /snmp
     params:
       auth: [public_v2]
@@ -37,7 +40,9 @@ scrape_configs:
         replacement: snmp-exporter:9116
 
   - job_name: snmp_vendor
-    scrape_interval: 60s
+    scrape_interval: 180s
+    # Vendor-specific walks may be larger/slower; give them more time.
+    scrape_timeout: 60s
     metrics_path: /snmp
     params:
       auth: [public_v2]
