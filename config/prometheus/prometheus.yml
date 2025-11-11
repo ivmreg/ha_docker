@@ -20,10 +20,10 @@ scrape_configs:
           - 'loki:3100'
 
   - job_name: snmp
-    scrape_interval: 60s
+    scrape_interval: 180s
     # SNMP walks on some devices can be slow; increase scrape_timeout so
     # Prometheus doesn't cancel the request after the 10s default.
-    scrape_timeout: 15s
+    scrape_timeout: 60s
     metrics_path: /snmp
     params:
       auth: [public_v2]
