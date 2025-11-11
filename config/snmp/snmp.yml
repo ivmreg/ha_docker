@@ -14,8 +14,8 @@ modules:
       - 1.3.6.1.2.1.1
       # interfaces (IF-MIB)
       - 1.3.6.1.2.1.2
-      # ifXTable (high capacity counters, names)
-      - 1.3.6.1.2.1.31.1.1
+      # # ifXTable (high capacity counters, names)
+      # - 1.3.6.1.2.1.31.1.1
 
   # TP-Link specific/extended metrics
   # Walk the TP-LINK enterprise tree and relevant standard MIBs
