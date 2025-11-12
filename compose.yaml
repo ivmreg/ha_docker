@@ -1,77 +1,10 @@
 version: "3.8"
 
 networks:
-  loki:
+  grafana:
     driver: bridge
 
 services:
-  loki:
-    image: grafana/loki:latest
-    container_name: loki
-    user: "0"
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-    volumes:
-      - ./loki-data:/loki
-      - ./config/loki/loki-config.yml:/etc/loki/local-config.yaml
-    networks:
-      - loki
-    restart: unless-stopped
-
-  promtail:
-    image: grafana/promtail:latest
-    container_name: promtail
-    ports:
-      - "514:514/udp"        # Syslog UDP
-      - "514:514/tcp"        # Syslog TCP
-      - "1514:1514/tcp"      # Alternative syslog port (TCP)
-      - "9080:9080"          # Promtail metrics
-    volumes:
-      - ./config/promtail/promtail.yaml:/etc/promtail/config.yaml
-      - /var/log:/var/log:ro
-    command: -config.file=/etc/promtail/config.yaml
-    networks:
-      - loki
-    depends_on:
-      - loki
-    restart: unless-stopped
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    user: "0"
-    ports:
-      - "9090:9090"
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
-      - --storage.tsdb.path=/prometheus
-    volumes:
-      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./prometheus-data:/prometheus
-    networks:
-      - loki
-    depends_on:
-      - promtail
-      - loki
-      - snmp-exporter
-    restart: unless-stopped
-
-  # chrony:
-  #   build:
-  #     context: ./dockerfiles/chrony
-  #     dockerfile: Dockerfile
-  #   container_name: chrony
-  #   ports:
-  #     - "123:123/udp"
-  #   volumes:
-  #     - ./chrony-data:/var/lib/chrony
-  #   networks:
-  #     - loki
-  #   restart: unless-stopped
-  #   cap_add:
-  #     - SYS_TIME
-
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -91,18 +24,5 @@ services:
       - ./grafana-data:/var/lib/grafana
       - ./config/grafana/provisioning:/etc/grafana/provisioning
     networks:
-      - loki
-    depends_on:
-      - loki
-    restart: unless-stopped
-
-  snmp-exporter:
-    image: prom/snmp-exporter:latest
-    container_name: snmp-exporter
-    ports:
-      - "9116:9116"
-    volumes:
-      - ./config/snmp/snmp.yml:/etc/snmp_exporter/snmp.yml:ro
-    networks:
-      - loki
+      - grafana
     restart: unless-stopped
